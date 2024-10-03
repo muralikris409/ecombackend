@@ -1,0 +1,24 @@
+<config>
+    <luceneMatchVersion>8.8.2</luceneMatchVersion>
+
+    <requestHandler name="/select" class="solr.SearchHandler">
+        <lst name="defaults">
+            <str name="echoParams">explicit</str>
+            <str name="q.op">OR</str>
+        </lst>
+    </requestHandler>
+
+    <updateRequestProcessorChain name="default">
+        <processor class="solr.RunIf">
+            <str name="condition">!${isIndexing}</str>
+            <processor class="solr.LogUpdateProcessorFactory">
+                <str name="message">Update: ${cmd}</str>
+            </processor>
+        </processor>
+        <processor class="solr.DistributingUpdateProcessorFactory">
+            <str name="distrib">true</str>
+        </processor>
+    </updateRequestProcessorChain>
+
+    <!-- Add other necessary configurations and components -->
+</config>
